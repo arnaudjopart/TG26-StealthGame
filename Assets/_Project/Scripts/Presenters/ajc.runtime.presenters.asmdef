@@ -1,0 +1,17 @@
+{
+    "name": "ajc.runtime.presenters",
+    "rootNamespace": "",
+    "references": [
+        "GUID:7277f73e6359d9a478999be449e0adbf",
+        "GUID:0101308bdabe95d4fbf701af0cfdce2c"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

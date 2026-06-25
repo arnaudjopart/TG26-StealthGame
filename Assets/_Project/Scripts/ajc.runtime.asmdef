@@ -1,0 +1,21 @@
+{
+    "name": "ajc.runtime",
+    "rootNamespace": "",
+    "references": [
+        "GUID:11e481912d568434ba9711a944bc9ea8",
+        "GUID:128b1b7c45382ea4dbd4c7b36a3aaa27",
+        "GUID:0101308bdabe95d4fbf701af0cfdce2c",
+        "GUID:7277f73e6359d9a478999be449e0adbf",
+        "GUID:4307f53044263cf4b835bd812fc161a4",
+        "GUID:75469ad4d38634e559750d17036d5f7c"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
