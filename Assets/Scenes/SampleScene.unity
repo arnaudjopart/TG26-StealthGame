@@ -2581,7 +2581,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 564e51ed1c79aa44fafe76f55380d4ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: ajc.runtime::LevelBootstrap
-  _playerPrefab: {fileID: 1539899646429407334, guid: a4fee10748d03144dbac34ee0bdcd3c3, type: 3}
+  _playerPrefab: {fileID: 5405898013828793744, guid: 0fc049992a73289769283242ead5a400, type: 3}
   _playerSpawnPoint: {fileID: 70971111}
   _mainCamera: {fileID: 946154274}
   _cameraList:

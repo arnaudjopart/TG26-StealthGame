@@ -4,6 +4,6 @@ namespace _Project.Scripts.Views.Interface
 {
     public interface IPlayerView
     {
-        void Move(Vector3 normalizedMoveData, float moveSpeed);
+        void Move(Vector3 direction, float moveSpeed);
     }
 }
