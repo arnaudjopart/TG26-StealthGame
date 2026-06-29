@@ -21,12 +21,6 @@ namespace _Project.Scripts.Views
         public bool IsDetectingWallOnRightSide => _isOnCornerRight;
         public bool IsDetectingWallOnLeftSide => _isOnCornerLeft;
 
-        private enum State
-        {
-            WallDetection,
-            CornerDetection
-        }
-        private State _currentState = State.WallDetection;
         private bool _isOnCornerRight;
         private bool _isOnCornerLeft;
         [SerializeField] private GameObject _rightCamera;
@@ -38,65 +32,59 @@ namespace _Project.Scripts.Views
         {
             
         }
+        
 
-        // Update is called once per frame
-        void Update()
+        public void DetectCorners()
         {
-            switch (_currentState)
-            {
-                case State.WallDetection:
-                    var ray = new Ray
-                    {
-                        origin = transform.position+Vector3.up*_offset,
-                        direction = transform.forward
-                    };
-                    if (Physics.Raycast(ray,  out var hit, _wallDetectionDistance, _layerMask))
-                    {
-                        _validationTimer+=Time.deltaTime;
-                        if (_validationTimer >= _coverTimeValidation)
-                        {
-                            OnCoverEvent?.Invoke(hit.normal);
-                        }
+            var upperLeftRay = new Ray(_upperLeftCornerDetectionTransform.position, transform.forward*-1);
+            var upperRightRay = new Ray(_upperRightCornerDetectionTransform.position, transform.forward*-1);
+                    
+            _isOnCornerRight = Physics.Raycast(upperRightRay, _cornerDetectionDistance, _layerMask);
+            _isOnCornerLeft = Physics.Raycast(upperLeftRay, _cornerDetectionDistance, _layerMask);
 
-                    }else
-                    {
-                        _validationTimer = 0f;
-                    }
-                    break;
-                case State.CornerDetection:
-                    var upperLeftRay = new Ray(_upperLeftCornerDetectionTransform.position, transform.forward*-1);
-                    var upperRightRay = new Ray(_upperRightCornerDetectionTransform.position, transform.forward*-1);
-                    
-                    _isOnCornerRight = Physics.Raycast(upperRightRay, _cornerDetectionDistance, _layerMask);
-                    _isOnCornerLeft = Physics.Raycast(upperLeftRay, _cornerDetectionDistance, _layerMask);
-                    
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
+        }
+
+        public void DetectWall()
+        {
+            var ray = new Ray
+            {
+                origin = transform.position+Vector3.up*_offset,
+                direction = transform.forward
+            };
+            if (Physics.Raycast(ray,  out var hit, _wallDetectionDistance, _layerMask))
+            {
+                _validationTimer+=Time.deltaTime;
+                if (_validationTimer >= _coverTimeValidation)
+                {
+                    OnCoverEvent?.Invoke(hit.normal);
+                }
+
+            }else
+            {
+                _validationTimer = 0f;
             }
-            
         }
 
         public void SwitchToCornerDetection()
         {
-            _currentState = State.CornerDetection;
+            
         }
+
         public void SwitchToWallDetection()
         {
-            _currentState = State.WallDetection;
             ActiveLeftCamera(false);
             ActiveRightCamera(false);
         }
 
         public void ActiveLeftCamera(bool active)
         {
-            if (_leftCamera != null && _leftCamera.activeInHierarchy == active) return;
+            if (_leftCamera && _leftCamera.activeInHierarchy == active) return;
             _leftCamera.SetActive(active);
         }
         
         public void ActiveRightCamera(bool active)
         {
-            if (_rightCamera != null && _rightCamera.activeInHierarchy == active) return;
+            if (_rightCamera && _rightCamera.activeInHierarchy == active) return;
             _rightCamera.SetActive(active);
         }
 

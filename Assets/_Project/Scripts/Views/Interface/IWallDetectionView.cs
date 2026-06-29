@@ -12,5 +12,7 @@ namespace _Project.Scripts.Views.Interface
         void SwitchToWallDetection();
         void ActiveRightCamera(bool active);
         void ActiveLeftCamera(bool active);
+        void DetectWall();
+        void DetectCorners();
     }
 }

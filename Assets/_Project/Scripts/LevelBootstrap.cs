@@ -1,10 +1,9 @@
 using _Project.Scripts.Models;
 using _Project.Scripts.Presenters;
-using _Project.Scripts.Views;
 using _Project.Scripts.Views.Interface;
 using Unity.Cinemachine;
 using UnityEngine;
-using UnityEngine.InputSystem.LowLevel;
+
 
 namespace _Project.Scripts
 {
@@ -47,19 +46,10 @@ namespace _Project.Scripts
         }
 
         // Update is called once per frame
-        void Update()
+        private void Update()
         {
             _inputManager.CurrentTickableController.Tick(Time.deltaTime);
             _wallDetectionPresenter.Tick(Time.deltaTime);
-            
-            /*if (Keyboard.current.enterKey.wasPressedThisFrame)
-            {
-                _cameraList[_index].gameObject.SetActive(false);
-                _index++;
-                _index %= _cameraList.Length;
-                _cameraList[_index].gameObject.SetActive(true);
-                _defaultInputListener.SwitchAxis(_cameraList[_index]);
-            }*/
         }
     }
 }

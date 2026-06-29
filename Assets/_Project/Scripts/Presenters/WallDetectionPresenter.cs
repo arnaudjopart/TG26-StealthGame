@@ -1,6 +1,5 @@
 ﻿using System;
 using _Project.Scripts.Models;
-using _Project.Scripts.Views;
 using _Project.Scripts.Views.Interface;
 using UnityEngine;
 
@@ -52,8 +51,10 @@ namespace _Project.Scripts.Presenters
             switch (_state)
             {
                 case State.DetectingWall:
+                    _wallDetectionView.DetectWall();
                     break;
                 case State.DetectingCorner:
+                    _wallDetectionView.DetectCorners();
                     _playerMovementModel.CanMoveRight = _wallDetectionView.IsDetectingWallOnRightSide;
                     _playerMovementModel.CanMoveLeft = _wallDetectionView.IsDetectingWallOnLeftSide;
                     _wallDetectionView.ActiveLeftCamera(!_playerMovementModel.CanMoveLeft);
