@@ -45,15 +45,17 @@ namespace _Project.Scripts.Views
 
         public void CoverMove(Vector3 data)
         {
-            _currentSpeed = Mathf.SmoothDamp(_currentSpeed, data.x, ref _velocity, _smoothTime);
+            var projectedMoveData = Vector3.ProjectOnPlane(data, _leaveCover);
+            var rightVector = Vector3.Cross(Vector3.down, _leaveCover);
+            var moveDirection = Mathf.Sign(Vector3.Dot(projectedMoveData, rightVector));
+            
+            _currentSpeed = Mathf.SmoothDamp(_currentSpeed, projectedMoveData.magnitude, ref _velocity, _smoothTime);
+            var clampDeltaMove = rightVector * (_currentSpeed * moveDirection);
             _animator.applyRootMotion = false;
-            _animator.SetFloat(BlendFloat, _currentSpeed);
-            //var deltaMove = _animator.deltaPosition;
-            var clampDeltaMove = Vector3.Cross(Vector3.down, _leaveCover)*_currentSpeed;
+            _animator.SetFloat(BlendFloat, _currentSpeed*moveDirection);
             _characterController.SimpleMove(clampDeltaMove);
             if (Vector3.Dot(_leaveCover, data.normalized) > 0.9f)
             {
-                Debug.Log("Leave Covered");
                 OnLeaveCoverEvent?.Invoke();
             }
         }

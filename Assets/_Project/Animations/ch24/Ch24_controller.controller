@@ -142,9 +142,9 @@ BlendTree:
     m_Threshold: -1
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
-    m_CycleOffset: 0
+    m_CycleOffset: 0.5
     m_DirectBlendParameter: WalkBlendFloat
-    m_Mirror: 0
+    m_Mirror: 1
   - serializedVersion: 2
     m_Motion: {fileID: -203655887218126122, guid: 92600ff391a65054cad6bf7a4255165e, type: 3}
     m_Threshold: 0
@@ -158,9 +158,9 @@ BlendTree:
     m_Threshold: 1
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
-    m_CycleOffset: 0.5
+    m_CycleOffset: 0
     m_DirectBlendParameter: WalkBlendFloat
-    m_Mirror: 1
+    m_Mirror: 0
   m_BlendParameter: WalkBlendFloat
   m_BlendParameterY: WalkBlendFloat
   m_MinThreshold: -1
