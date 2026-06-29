@@ -1,3 +1,4 @@
+using System;
 using _Project.Scripts.Views.Interface;
 using UnityEngine;
 
@@ -6,13 +7,12 @@ namespace _Project.Scripts.Presenters
     public class CameraSystem
     {
         private readonly ICameraProvider[] _levelCameras;
-        private readonly IUpdateInputAxis _playerInputListener;
         private Transform _currentCameraTransform;
         private Transform _defaultCamera;
 
-        public CameraSystem(IUpdateInputAxis playerInputListener, ICameraProvider[] levelCameras)
+        public CameraSystem(ICameraProvider[] levelCameras)
         {
-            _playerInputListener = playerInputListener;
+
             _levelCameras = levelCameras;
         
             foreach (var cameraProvider in _levelCameras)
@@ -21,6 +21,8 @@ namespace _Project.Scripts.Presenters
                 cameraProvider.OnCameraReleaseEvent+= CameraReleaseEvent;
             }
         }
+
+        public event Action<Transform> OnCameraSwitchEvent;
 
         public void SetDefaultCamera(Transform defaultCamera)
         {
@@ -32,15 +34,16 @@ namespace _Project.Scripts.Presenters
         {
             _currentCameraTransform.gameObject.SetActive(false);
             _currentCameraTransform = obj==null ? _defaultCamera : obj;
-            _playerInputListener.SwitchAxis(_currentCameraTransform);
+            OnCameraSwitchEvent?.Invoke(_currentCameraTransform);//SwitchAxis(_currentCameraTransform);
             _currentCameraTransform.gameObject.SetActive(true);
         }
 
         private void OnCameraProvideEvent(Transform obj)
         {
             _currentCameraTransform.gameObject.SetActive(false);
-            _playerInputListener.SwitchAxis(obj);
+            //_playerInputListener.SwitchAxis(obj);
             _currentCameraTransform= obj.transform;
+            OnCameraSwitchEvent?.Invoke(_currentCameraTransform);
             _currentCameraTransform.gameObject.SetActive(true);
         }
 

@@ -2,9 +2,8 @@ using _Project.Scripts.Presenters;
 using _Project.Scripts.Views;
 using _Project.Scripts.Views.Interface;
 using Unity.Cinemachine;
-using Unity.VisualScripting.IonicZip;
 using UnityEngine;
-using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.LowLevel;
 
 namespace _Project.Scripts
 {
@@ -13,12 +12,13 @@ namespace _Project.Scripts
         [SerializeField] private GameObject _playerPrefab;
         [SerializeField, Tooltip("Level Start Position")] private Transform _playerSpawnPoint;
         [SerializeField, Tooltip("The main camera")] CinemachineCamera _mainCamera;
-        private PlayerActionsListener _playerInputListener;
         private PlayerMovementInputPresenter _playerMovementInputPresenter;
         private GameObject _playerInstance;
         [SerializeField] private Transform[] _cameraList;
         private int _index;
         [SerializeField] private GameObject[] _levelCameras;
+        private WallDetectionPresenter _wallDetectionPresenter;
+        private GameplayInputManager _inputManager;
 
         // Start is called once before the first execution of Update after the MonoBehaviour is created
         private void Start()
@@ -30,30 +30,34 @@ namespace _Project.Scripts
                 TrackingTarget = _playerInstance.transform
             };
             
-            _playerInputListener = new PlayerActionsListener(Camera.main.transform);
-            _playerInputListener.Enable(true);
-
             var playerMovementData = new PlayerMovementModel();
-            _playerMovementInputPresenter = new PlayerMovementInputPresenter(
-                _playerInputListener, 
-                _playerInstance.GetComponent<IPlayerView>(),
-                playerMovementData);
-            var cameraSystem = new CameraSystem(_playerInputListener, _levelCameras.ExtractInterface<ICameraProvider>());
+            
+            _inputManager = new GameplayInputManager(_playerInstance, playerMovementData);
+            _wallDetectionPresenter = new WallDetectionPresenter(_playerInstance.GetComponent<IWallDetectionView>(),_playerInstance.GetComponent<ITakeCover>());
+            
+            _wallDetectionPresenter.OnWallDetectedEvent += _inputManager.SwitchToSneakyInput;
+            _wallDetectionPresenter.OnLeaveCoverEvent += _inputManager.SwitchToDefaultInput;
+            
+            var cameraSystem = new CameraSystem(_levelCameras.ExtractInterface<ICameraProvider>());
+            cameraSystem.OnCameraSwitchEvent += _inputManager.UpdateInputAxis;
             cameraSystem.SetDefaultCamera(_mainCamera.transform);
+            
+            _inputManager.SwitchToDefaultInput();
         }
 
         // Update is called once per frame
         void Update()
         {
-            _playerMovementInputPresenter.Tick(Time.deltaTime);
-            if (Keyboard.current.enterKey.wasPressedThisFrame)
+            _inputManager.CurrentTickableController.Tick(Time.deltaTime);
+            
+            /*if (Keyboard.current.enterKey.wasPressedThisFrame)
             {
                 _cameraList[_index].gameObject.SetActive(false);
                 _index++;
                 _index %= _cameraList.Length;
                 _cameraList[_index].gameObject.SetActive(true);
-                _playerInputListener.SwitchAxis(_cameraList[_index]);
-            }
+                _defaultInputListener.SwitchAxis(_cameraList[_index]);
+            }*/
         }
     }
 }

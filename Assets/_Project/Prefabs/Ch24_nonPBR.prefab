@@ -66,6 +66,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 5a827af0909c0c04c8341f6b682fd8f6, type: 3}
       insertIndex: -1
       addedObject: {fileID: 3053690616570995370}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 5a827af0909c0c04c8341f6b682fd8f6, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -6453475626281426994}
   m_SourcePrefab: {fileID: 100100000, guid: 5a827af0909c0c04c8341f6b682fd8f6, type: 3}
 --- !u!1 &5405898013828793744 stripped
 GameObject:
@@ -91,10 +94,10 @@ CharacterController:
   m_Enabled: 1
   serializedVersion: 3
   m_Height: 1.8
-  m_Radius: 0.31
+  m_Radius: 0.25
   m_SlopeLimit: 45
   m_StepOffset: 0.3
-  m_SkinWidth: 0.08
+  m_SkinWidth: 0.001
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0.9, z: 0}
 --- !u!114 &3053690616570995370
@@ -112,3 +115,21 @@ MonoBehaviour:
   _currentSpeed: 0
   _velocity: 1
   _smoothTime: 0.1
+--- !u!114 &-6453475626281426994
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5405898013828793744}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ee1632379f36604e9e7ecb6ec26809b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: ajc.runtime.view::_Project.Scripts.Views.WallDetectionSystem
+  _wallDetectionDistance: 0.4
+  _offset: 1
+  _layerMask:
+    serializedVersion: 2
+    m_Bits: 64
+  _coverTimeValidation: 0.2

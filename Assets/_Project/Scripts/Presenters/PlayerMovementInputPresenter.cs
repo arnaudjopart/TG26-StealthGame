@@ -1,9 +1,8 @@
 ﻿using _Project.Scripts.Views.Interface;
-using UnityEngine;
 
 namespace _Project.Scripts.Presenters
 {
-    public class PlayerMovementInputPresenter
+    public class PlayerMovementInputPresenter:  IInputTickable
     {
         private readonly IProvidePlayerMovementData _inputListener;
         private readonly IPlayerView _playerView;
@@ -21,8 +20,9 @@ namespace _Project.Scripts.Presenters
 
         public void Tick(float deltaTime)
         {
-            var speed = _inputListener.MoveSpeed * _playerMovementModel.MoveSpeed;
+            var speed = _inputListener.MoveSpeed;
             _playerView.Move(_inputListener.MoveDirection, speed);
         }
+        
     }
 }

@@ -6,7 +6,7 @@ using UnityEngine.InputSystem;
 
 namespace _Project.Scripts.Views
 {
-    public class PlayerActionsListener: PlayerInputSystem.IPlayerActions, IProvidePlayerMovementData, IUpdateInputAxis
+    public class PlayerActionsListener: PlayerInputSystem.IPlayerActions, IProvidePlayerMovementData, IInputListener
     {
         private Transform _axisTransform;
         private Vector2 _moveVector;
@@ -15,14 +15,12 @@ namespace _Project.Scripts.Views
         private Vector3 _projectedRightVector;
         private float _speed;
 
-        public PlayerActionsListener(Transform axisTransform,bool enableOnStart = false)
+        public PlayerActionsListener(Transform axisTransform)
         {
             _axisTransform = axisTransform;
             var inputSystem = new PlayerInputSystem();
             _actionMap = inputSystem.Player;
             _actionMap.AddCallbacks(this);
-            if(enableOnStart) _actionMap.Enable();
-            else _actionMap.Disable();
         }
 
         public void SwitchAxis(Transform axisReference)
@@ -34,6 +32,8 @@ namespace _Project.Scripts.Views
             if(enable) _actionMap.Enable();
             else _actionMap.Disable();
         }
+
+
 
         public void Toggle()
         {
@@ -58,6 +58,7 @@ namespace _Project.Scripts.Views
 
             if (context.canceled)
             {
+                _moveVector = Vector2.zero;
                 _speed = 0;
                 UpdateAxis();
             }

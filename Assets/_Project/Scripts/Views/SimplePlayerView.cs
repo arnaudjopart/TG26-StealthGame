@@ -26,5 +26,10 @@ namespace _Project.Scripts.Views
             transform.rotation = rotation;
             _characterController.SimpleMove(transform.forward * moveSpeed);
         }
+
+        public void CoverMove(Vector3 data)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }
