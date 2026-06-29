@@ -49,16 +49,27 @@ namespace _Project.Scripts.Views
             var rightVector = Vector3.Cross(Vector3.down, _leaveCover);
             var moveDirection = Mathf.Sign(Vector3.Dot(projectedMoveData, rightVector));
             
-            _currentSpeed = Mathf.SmoothDamp(_currentSpeed, projectedMoveData.magnitude, ref _velocity, _smoothTime);
-            var clampDeltaMove = rightVector * (_currentSpeed * moveDirection);
-            _animator.applyRootMotion = false;
-            _animator.SetFloat(BlendFloat, _currentSpeed*moveDirection);
-            _characterController.SimpleMove(clampDeltaMove);
             if (Vector3.Dot(_leaveCover, data.normalized) > 0.9f)
             {
                 OnLeaveCoverEvent?.Invoke();
             }
+            
+            if (moveDirection >= 0 && !CanMoveRight || moveDirection < 0 && !CanMoveLeft)
+            {
+                _animator.SetFloat(BlendFloat, 0);
+                return;
+            }
+
+            _currentSpeed = Mathf.SmoothDamp(_currentSpeed, projectedMoveData.magnitude, ref _velocity, _smoothTime);
+            var clampDeltaMove = rightVector * (_currentSpeed * moveDirection);
+            
+            _animator.SetFloat(BlendFloat, _currentSpeed*moveDirection);
+            _characterController.SimpleMove(clampDeltaMove);
+            
         }
+
+        public bool CanMoveLeft { get; set; }
+        public bool CanMoveRight { get; set; }
 
         public void TakeCover(Vector3 direction)
         {
@@ -66,6 +77,7 @@ namespace _Project.Scripts.Views
             _leaveCover  = direction;
             var rotation = Quaternion.LookRotation(direction);
             transform.rotation = rotation;
+            _animator.applyRootMotion = false;
             _animator.SetBool("isCoverBool",true);
             _currentSpeed = 0;
         }

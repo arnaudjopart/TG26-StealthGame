@@ -1,3 +1,4 @@
+using _Project.Scripts.Models;
 using _Project.Scripts.Presenters;
 using _Project.Scripts.Views;
 using _Project.Scripts.Views.Interface;
@@ -33,7 +34,7 @@ namespace _Project.Scripts
             var playerMovementData = new PlayerMovementModel();
             
             _inputManager = new GameplayInputManager(_playerInstance, playerMovementData);
-            _wallDetectionPresenter = new WallDetectionPresenter(_playerInstance.GetComponent<IWallDetectionView>(),_playerInstance.GetComponent<ITakeCover>());
+            _wallDetectionPresenter = new WallDetectionPresenter(_playerInstance.GetComponent<IWallDetectionView>(),_playerInstance.GetComponent<ITakeCover>(), playerMovementData);
             
             _wallDetectionPresenter.OnWallDetectedEvent += _inputManager.SwitchToSneakyInput;
             _wallDetectionPresenter.OnLeaveCoverEvent += _inputManager.SwitchToDefaultInput;
@@ -49,6 +50,7 @@ namespace _Project.Scripts
         void Update()
         {
             _inputManager.CurrentTickableController.Tick(Time.deltaTime);
+            _wallDetectionPresenter.Tick(Time.deltaTime);
             
             /*if (Keyboard.current.enterKey.wasPressedThisFrame)
             {

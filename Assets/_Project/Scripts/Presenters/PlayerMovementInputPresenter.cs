@@ -1,4 +1,5 @@
-﻿using _Project.Scripts.Views.Interface;
+﻿using _Project.Scripts.Models;
+using _Project.Scripts.Views.Interface;
 
 namespace _Project.Scripts.Presenters
 {

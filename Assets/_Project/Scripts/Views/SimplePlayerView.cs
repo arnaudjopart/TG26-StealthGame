@@ -31,5 +31,8 @@ namespace _Project.Scripts.Views
         {
             throw new System.NotImplementedException();
         }
+
+        public bool CanMoveLeft { get; set; }
+        public bool CanMoveRight { get; set; }
     }
 }

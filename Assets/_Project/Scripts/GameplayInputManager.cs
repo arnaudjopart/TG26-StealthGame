@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using _Project.Scripts.Models;
 using _Project.Scripts.Presenters;
 using _Project.Scripts.Views;
 using _Project.Scripts.Views.Interface;
@@ -23,7 +24,7 @@ namespace _Project.Scripts
             _defaultInput = new PlayerActionsListener(Camera.main.transform);
             _defaultInputController = new PlayerMovementInputPresenter(_defaultInput, player.GetComponent<IPlayerView>(), playerMovementModel);
             _sneakyInput = new SneakyInputListener(Camera.main.transform);
-            _sneakyInputPresenter = new SneakyInputPresenter(_sneakyInput, player.GetComponent<IPlayerView>());
+            _sneakyInputPresenter = new SneakyInputPresenter(_sneakyInput, player.GetComponent<IPlayerView>(), playerMovementModel);
             
             _inputListeners.Add(_defaultInput);
             _inputListeners.Add(_sneakyInput);
