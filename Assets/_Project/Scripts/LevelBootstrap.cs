@@ -1,3 +1,4 @@
+using System;
 using _Project.Scripts.Models;
 using _Project.Scripts.Presenters;
 using _Project.Scripts.Views.Interface;
@@ -19,11 +20,13 @@ namespace _Project.Scripts
         [SerializeField] private GameObject[] _levelCameras;
         private WallDetectionPresenter _wallDetectionPresenter;
         private GameplayInputManager _inputManager;
+        [Header("Debug")]
+        [SerializeField] private GameObject _playerDebugInstance;
 
         // Start is called once before the first execution of Update after the MonoBehaviour is created
         private void Start()
         {
-            _playerInstance = Instantiate(_playerPrefab, _playerSpawnPoint.position,Quaternion.identity);
+            _playerInstance = _playerDebugInstance ? _playerDebugInstance : Instantiate(_playerPrefab, _playerSpawnPoint.position,Quaternion.identity);
             _mainCamera.Target = new CameraTarget()
             {
                 LookAtTarget = _playerInstance.transform,
@@ -33,7 +36,18 @@ namespace _Project.Scripts
             var playerMovementData = new PlayerMovementModel();
             
             _inputManager = new GameplayInputManager(_playerInstance, playerMovementData);
-            _wallDetectionPresenter = new WallDetectionPresenter(_playerInstance.GetComponent<IWallDetectionView>(),_playerInstance.GetComponent<ITakeCover>(), playerMovementData);
+            try
+            {
+                var wallDetectionView = _playerInstance.GetComponent<IWallDetectionView>();
+                var takeCoverView = _playerInstance.GetComponent<ITakeCover>();
+                if (wallDetectionView == null|| takeCoverView==null) throw new NullReferenceException();
+                
+                _wallDetectionPresenter = new WallDetectionPresenter(wallDetectionView,takeCoverView, playerMovementData);
+            }
+            catch (NullReferenceException e)
+            {
+                return;
+            }
             
             _wallDetectionPresenter.OnWallDetectedEvent += _inputManager.SwitchToSneakyInput;
             _wallDetectionPresenter.OnLeaveCoverEvent += _inputManager.SwitchToDefaultInput;

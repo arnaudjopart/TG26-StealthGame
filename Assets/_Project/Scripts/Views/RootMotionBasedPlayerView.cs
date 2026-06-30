@@ -5,7 +5,7 @@ using UnityEngine;
 namespace _Project.Scripts.Views
 {
     [RequireComponent(typeof(CharacterController), typeof(Animator))]
-    public class RootMotionBasedPlayerView : MonoBehaviour, IPlayerView, ITakeCover
+    public class RootMotionBasedPlayerView : MonoBehaviour, IPlayerView, ITakeCover, ICanBeDetected
     {
         private static readonly int BlendFloat = Animator.StringToHash("WalkBlendFloat");
         private static readonly int IsCoverBool = Animator.StringToHash("isCoverBool");
@@ -49,10 +49,7 @@ namespace _Project.Scripts.Views
             var rightVector = Vector3.Cross(Vector3.down, _leaveCover);
             var moveDirection = Mathf.Sign(Vector3.Dot(projectedMoveData, rightVector));
             
-            if (Vector3.Dot(_leaveCover, data.normalized) > 0.9f)
-            {
-                OnLeaveCoverEvent?.Invoke();
-            }
+            if (Vector3.Dot(_leaveCover, data.normalized) > 0.9f) OnLeaveCoverEvent?.Invoke();
             
             if (moveDirection >= 0 && !CanMoveRight || moveDirection < 0 && !CanMoveLeft)
             {
@@ -80,6 +77,13 @@ namespace _Project.Scripts.Views
             _animator.applyRootMotion = false;
             _animator.SetBool("isCoverBool",true);
             _currentSpeed = 0;
+        }
+
+        public event Action OnDestroy;
+        public Vector3 Position => transform.position;
+        public void ReactToDetection()
+        {
+            Debug.Log("ReactToDetection");
         }
     }
 }

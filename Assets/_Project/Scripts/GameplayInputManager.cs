@@ -20,11 +20,17 @@ namespace _Project.Scripts
 
         public GameplayInputManager(GameObject player, PlayerMovementModel playerMovementModel)
         {
+            var playerView = player.GetComponent<IPlayerView>();
+            if (playerView == null)
+            {
+                Debug.LogError("GameplayInputManager could not find playerView");
+                return;
+            }
             _inputListeners = new List<IInputListener>();
             _defaultInput = new PlayerActionsListener(Camera.main.transform);
-            _defaultInputController = new PlayerMovementInputPresenter(_defaultInput, player.GetComponent<IPlayerView>(), playerMovementModel);
+            _defaultInputController = new PlayerMovementInputPresenter(_defaultInput, playerView, playerMovementModel);
             _sneakyInput = new SneakyInputListener(Camera.main.transform);
-            _sneakyInputPresenter = new SneakyInputPresenter(_sneakyInput, player.GetComponent<IPlayerView>(), playerMovementModel);
+            _sneakyInputPresenter = new SneakyInputPresenter(_sneakyInput, playerView, playerMovementModel);
             
             _inputListeners.Add(_defaultInput);
             _inputListeners.Add(_sneakyInput);
