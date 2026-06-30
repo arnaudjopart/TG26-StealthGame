@@ -18,11 +18,21 @@ namespace _Project.Scripts.Views
         
         }
 
-        public event Action OnDestroy;
+        public event Action<GameObject> OnDestroyEvent;
         public Vector3 Position =>  transform.position;
         public void ReactToDetection()
         {
             Debug.Log("ReactToDetection");
+        }
+
+        public void Apply()
+        {
+            Destroy(gameObject);
+        }
+
+        private void OnDestroy()
+        {
+            OnDestroyEvent?.Invoke(gameObject);
         }
     }
 }

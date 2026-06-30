@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using _Project.Scripts.Views.Interface;
 using UnityEngine;
-using UnityEngine.AI;
 
 namespace _Project.Scripts.Presenters
 {
@@ -22,12 +21,23 @@ namespace _Project.Scripts.Presenters
         
         private State _state =  State.Detect;
         private IMove _move;
+        private Vector3 _lastPosition;
 
         private void Awake()
         {
             _detection = GetComponent<IDetectPlayer>();
             _move = GetComponent<IMove>();
             _detection.OnTriggerEnterEvent+= DetectionOnOnTriggerEvent;
+            _move.OnReachTargetEvent+= MoveOnOnReachTargetEvent;
+        }
+
+        private void MoveOnOnReachTargetEvent()
+        {
+            if (_target != null)
+            {
+                _target.Apply();
+                _target = null;
+            }
         }
 
         private void DetectionOnOnTriggerEvent(GameObject obj, bool b)
@@ -43,7 +53,7 @@ namespace _Project.Scripts.Presenters
                         if (success)
                         {
                             Debug.Log("Successfully detected " + obj.GetEntityId());
-                            canBeDetected.OnDestroy+= CanBeDetectedOnOnDestroy;
+                            canBeDetected.OnDestroyEvent+= CanBeDetectedOnOnDestroy;
                         }
                         else
                         {
@@ -52,7 +62,7 @@ namespace _Project.Scripts.Presenters
                     }
                     else
                     {
-                        canBeDetected.OnDestroy -= CanBeDetectedOnOnDestroy;
+                        canBeDetected.OnDestroyEvent -= CanBeDetectedOnOnDestroy;
                         _enemies.Remove(obj.GetEntityId());
                     }
                 }
@@ -73,9 +83,10 @@ namespace _Project.Scripts.Presenters
     
         }
 
-        private void CanBeDetectedOnOnDestroy()
+        private void CanBeDetectedOnOnDestroy(GameObject obj)
         {
-            throw new NotImplementedException();
+            Debug.Log(obj.GetEntityId());
+            _enemies.Remove(obj.GetEntityId());
         }
 
         private void Update()
@@ -92,8 +103,8 @@ namespace _Project.Scripts.Presenters
                     }
                     break;
                 case State.Pursuit:
-                    
-                    _move.SetMoveDestination(_target.Position);
+                    if(_target != null) _move.SetMoveDestination(_target.Position);
+                    else _state = State.Detect;
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -114,6 +125,7 @@ namespace _Project.Scripts.Presenters
 
         private void SwitchToPursuit()
         {
+            _lastPosition = transform.position;
             _state = State.Pursuit;
         }
     }

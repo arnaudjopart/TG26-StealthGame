@@ -78,12 +78,17 @@ namespace _Project.Scripts.Views
             _animator.SetBool("isCoverBool",true);
             _currentSpeed = 0;
         }
-
-        public event Action OnDestroy;
+        
+        public event Action<GameObject> OnDestroyEvent;
         public Vector3 Position => transform.position;
         public void ReactToDetection()
         {
             Debug.Log("ReactToDetection");
+        }
+
+        public void Apply()
+        {
+            Debug.Log("Apply");
         }
     }
 }
